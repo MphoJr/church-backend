@@ -1,12 +1,22 @@
-router.post("/", async (req, res) => {
-  const { title, preacher, content } = req.body;
-  const sermon = await prisma.sermon.create({
-    data: { title, preacher, content },
-  });
-  res.json(sermon);
-});
+const express = require("express");
+const {
+  createSermon,
+  getSermons,
+  getSermonById,
+  updateSermon,
+  deleteSermon,
+} = require("../controllers/sermonController");
+const authenticateToken = require("../middleware/auth");
 
-router.get("/", async (req, res) => {
-  const sermons = await prisma.sermon.findMany();
-  res.json(sermons);
-});
+const router = express.Router();
+
+// Protected routes
+router.post("/", authenticateToken, createSermon);
+router.put("/:id", authenticateToken, updateSermon);
+router.delete("/:id", authenticateToken, deleteSermon);
+
+// Public routes
+router.get("/", getSermons);
+router.get("/:id", getSermonById);
+
+module.exports = router;
