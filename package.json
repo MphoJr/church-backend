@@ -8,6 +8,7 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "prisma:generate": "prisma generate",
+    "postinstall": "prisma generate",
     "prisma:validate": "prisma validate"
   },
   "keywords": [],
