@@ -4,8 +4,6 @@ const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const sermonRoutes = require("./routes/sermons");
 const eventRoutes = require("./routes/events");
-const eventRoutes = require("./routes/events");
-app.use("/events", eventRoutes);
 
 const app = express();
 
