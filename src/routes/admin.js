@@ -1,8 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { PrismaClient } = require("@prisma/client");
-
-const prisma = new PrismaClient();
+const prisma = require("../config/db");
 const router = express.Router();
 
 // Register new admin (run once to seed)
