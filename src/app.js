@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const prisma = require("./config/db");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const sermonRoutes = require("./routes/sermons");
@@ -10,6 +11,23 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+app.get("/health", async (_req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+
+    res.json({
+      status: "ok",
+      database: "connected",
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: "error",
+      database: "disconnected",
+      message: error.message,
+    });
+  }
+});
 
 // Routes
 app.use("/auth", authRoutes);
