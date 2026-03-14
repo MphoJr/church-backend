@@ -35,4 +35,11 @@ app.use("/admin", adminRoutes);
 app.use("/sermons", sermonRoutes);
 app.use("/events", eventRoutes);
 
+app.use("/.well-known/appspecific/com.chrome.devtools.json", (req, res) => {
+  res.status(200).json({ message: "DevTools config not implemented" });
+});
+
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
 module.exports = app;

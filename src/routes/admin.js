@@ -2,7 +2,9 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const prisma = require("../config/db");
 const router = express.Router();
+const { registerAdmin } = require("../controllers/adminController");
 
+router.post("/register", registerAdmin);
 // Register new admin (run once to seed)
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
