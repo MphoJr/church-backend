@@ -2,11 +2,25 @@ const prisma = require("../config/db");
 
 // CREATE
 exports.createSermon = async (req, res) => {
-  const { title, preacher, content } = req.body;
-  const sermon = await prisma.sermon.create({
-    data: { title, preacher, content },
-  });
-  res.json(sermon);
+  try {
+    const { title, preacher, content, date } = req.body;
+    const audioUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const sermon = await prisma.sermon.create({
+      data: {
+        title,
+        preacher,
+        content,
+        date: date ? new Date(date) : new Date(),
+        audioUrl,
+      },
+    });
+
+    res.json({ message: "Sermon uploaded successfully!", sermon });
+  } catch (err) {
+    console.error("Error creating sermon:", err);
+    res.status(500).json({ message: "Upload failed", error: err.message });
+  }
 };
 
 // READ (all)

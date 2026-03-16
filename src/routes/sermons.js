@@ -7,8 +7,18 @@ const {
   deleteSermon,
 } = require("../controllers/sermonController");
 const authenticateToken = require("../middleware/auth");
+const multer = require("multer");
 
 const router = express.Router();
+
+// Multer setup
+const storage = multer.diskStorage({
+  destination: "./uploads/",
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+const upload = multer({ storage });
 
 // Protected routes
 router.post("/", authenticateToken, createSermon);

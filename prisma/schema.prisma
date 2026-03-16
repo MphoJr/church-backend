@@ -20,11 +20,12 @@ model Admin {
 }
 
 model Sermon {
-  id       Int      @id @default(autoincrement())
-  title    String
-  preacher String
+  id        Int      @id @default(autoincrement())
+  title     String
+  preacher  String
   date      DateTime @default(now())
-  content  String
+  content   String
+  audioUrl  String?   // ✅ URL or path to the uploaded MP3 file
 }
 
 model Event {
