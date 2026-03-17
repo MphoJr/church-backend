@@ -1,31 +1,65 @@
-const bcrypt = require("bcrypt");
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../config/db");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-// POST /admin/register
+// REGISTER ADMIN
 exports.registerAdmin = async (req, res) => {
-  const { email, password, secret } = req.body;
-
   try {
-    // Only allow if secret matches your .env ADMIN_SECRET
-    if (secret !== process.env.ADMIN_SECRET) {
-      return res.status(403).json({ error: "Unauthorized" });
-    }
+    const { email, password } = req.body;
 
+    // Check if admin already exists
     const existing = await prisma.admin.findUnique({ where: { email } });
     if (existing) {
       return res.status(400).json({ error: "Admin already exists" });
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create admin
     const admin = await prisma.admin.create({
       data: { email, password: hashedPassword },
     });
 
-    res.status(201).json({ message: "Admin registered successfully", admin });
+    res.json({
+      message: "Admin registered successfully",
+      admin: { id: admin.id, email: admin.email },
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
+    console.error("Error registering admin:", err);
+    res
+      .status(500)
+      .json({ message: "Registration failed", error: err.message });
+  }
+};
+
+// LOGIN ADMIN
+exports.loginAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find admin
+    const admin = await prisma.admin.findUnique({ where: { email } });
+    if (!admin) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Compare password
+    const validPassword = await bcrypt.compare(password, admin.password);
+    if (!validPassword) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Generate JWT
+    const token = jwt.sign(
+      { id: admin.id, email: admin.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" },
+    );
+
+    res.json({ message: "Login successful", token });
+  } catch (err) {
+    console.error("Error logging in admin:", err);
+    res.status(500).json({ message: "Login failed", error: err.message });
   }
 };

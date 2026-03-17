@@ -5,6 +5,7 @@ const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const sermonRoutes = require("./routes/sermons");
 const eventRoutes = require("./routes/events");
+const authenticateToken = require("./middleware/authenticateToken"); //
 
 const app = express();
 
@@ -28,6 +29,10 @@ app.get("/health", async (_req, res) => {
     });
   }
 });
+
+app.use("/admin", require("./routes/admin")); // register/login routes
+app.use("/events", authenticateToken, require("./routes/events")); // protected
+app.use("/sermons", authenticateToken, require("./routes/sermons")); // protected
 
 // Routes
 app.use("/auth", authRoutes);
