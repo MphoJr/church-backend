@@ -33,6 +33,7 @@ app.get("/health", async (_req, res) => {
 app.use("/admin", require("./routes/admin")); // register/login routes
 app.use("/events", authenticateToken, require("./routes/events")); // protected
 app.use("/sermons", authenticateToken, require("./routes/sermons")); // protected
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/auth", authRoutes);
