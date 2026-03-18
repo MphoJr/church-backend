@@ -20,9 +20,10 @@ router.post(
       const sermon = await prisma.sermon.create({
         data: {
           title,
-          description,
+          preacher,
           date: new Date(date),
-          audioUrl: `/uploads/${req.file.filename}`, // store file path
+          content,
+          audioUrl: `/uploads/${req.file.filename}`,
         },
       });
 

@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use("/uploads", express.static("uploads")); // serve audio files
 app.use("/", sermonsRoutes); // exposes /sermons
+app.use("/api", sermonsRoutes);
 
 app.listen(PORT, () => {
   console.log(`Church backend running on port ${PORT}`);
