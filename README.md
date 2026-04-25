@@ -20,7 +20,7 @@ A Node.js + Express backend for managing church application features such as aut
 ## ⚙️ Setup & Installation
 1. **Clone the repo**
    ```bash
-   git clone https://github.com/your-username/church-backend.git
+   git clone https://github.com/MphoJr/church-backend.git
    cd church-backend
    ```
    2.Install dependencies
@@ -49,7 +49,7 @@ npm run start
 
 🖥️ Frontend Repository
 The frontend for this project is maintained separately:
-👉 Church Frontend Repository (github/MphoJr/NOAG-main)
+👉 Church Frontend Repository (https://github.com/MphoJr/NAOG_Frontend)
 Make sure to clone and run the frontend alongside this backend for full functionality.
 
 Scripts
