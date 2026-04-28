@@ -1,58 +1,54 @@
-const prisma = require("../config/db");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
-// CREATE
-exports.createSermon = async (req, res) => {
+// Upload sermon
+exports.uploadSermon = async (req, res) => {
+  const { title, preacher, date, content } = req.body;
+  const audioUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
   try {
-    const { title, preacher, content, date } = req.body;
-    const audioUrl = req.file ? `/uploads/${req.file.filename}` : null;
-
     const sermon = await prisma.sermon.create({
       data: {
         title,
         preacher,
+        date: new Date(date),
         content,
-        date: date ? new Date(date) : new Date(),
         audioUrl,
       },
     });
-
-    res.json({ message: "Sermon uploaded successfully!", sermon });
+    res.status(201).json({ message: "Sermon uploaded successfully", sermon });
   } catch (err) {
-    console.error("Error creating sermon:", err);
-    res.status(500).json({ message: "Upload failed", error: err.message });
+    console.error(err);
+    res.status(500).json({ error: "Failed to upload sermon" });
   }
 };
 
-// READ (all)
-exports.getSermons = async (req, res) => {
-  const sermons = await prisma.sermon.findMany();
-  res.json(sermons);
+// List sermons
+exports.listSermons = async (req, res) => {
+  try {
+    const sermons = await prisma.sermon.findMany({ orderBy: { date: "desc" } });
+    res.json(sermons);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch sermons" });
+  }
 };
 
-// READ (single)
 exports.getSermonById = async (req, res) => {
   const { id } = req.params;
-  const sermon = await prisma.sermon.findUnique({
-    where: { id: parseInt(id) },
-  });
-  if (!sermon) return res.status(404).json({ error: "Sermon not found" });
-  res.json(sermon);
-};
 
-// UPDATE
-exports.updateSermon = async (req, res) => {
-  const { id } = req.params;
-  const { title, preacher, content } = req.body;
-  const sermon = await prisma.sermon.update({
-    where: { id: parseInt(id) },
-    data: { title, preacher, content },
-  });
-  res.json(sermon);
-};
+  try {
+    const sermon = await prisma.sermon.findUnique({
+      where: { id: parseInt(id) },
+    });
 
-// DELETE
-exports.deleteSermon = async (req, res) => {
-  const { id } = req.params;
-  await prisma.sermon.delete({ where: { id: parseInt(id) } });
-  res.json({ message: "Sermon deleted successfully" });
+    if (!sermon) {
+      return res.status(404).json({ error: "Sermon not found" });
+    }
+
+    res.json(sermon);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch sermon" });
+  }
 };

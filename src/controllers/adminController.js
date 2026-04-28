@@ -63,3 +63,23 @@ exports.loginAdmin = async (req, res) => {
     res.status(500).json({ message: "Login failed", error: err.message });
   }
 };
+
+exports.getSermonById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const sermon = await prisma.sermon.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!sermon) {
+      return res.status(404).json({ error: "Sermon not found" });
+    }
+
+    res.json(sermon);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch sermon" });
+  }
+};
+
