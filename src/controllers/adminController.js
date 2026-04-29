@@ -54,7 +54,7 @@ exports.loginAdmin = async (req, res) => {
     const token = jwt.sign(
       { id: admin.id, email: admin.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" },
+      { expiresIn: "5m" },
     );
 
     res.json({ message: "Login successful", token });
@@ -82,4 +82,3 @@ exports.getSermonById = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch sermon" });
   }
 };
-
