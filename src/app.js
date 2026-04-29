@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const sermonRoutes = require("./routes/sermons");
 const eventRoutes = require("./routes/events");
+const contactRoutes = require("./routes/contact");
 
 const app = express();
 
@@ -19,13 +20,11 @@ app.get("/health", async (_req, res) => {
     await prisma.$queryRaw`SELECT 1`;
     res.json({ status: "ok", database: "connected" });
   } catch (error) {
-    res
-      .status(503)
-      .json({
-        status: "error",
-        database: "disconnected",
-        message: error.message,
-      });
+    res.status(503).json({
+      status: "error",
+      database: "disconnected",
+      message: error.message,
+    });
   }
 });
 
@@ -35,6 +34,7 @@ app.use("/admin", adminRoutes);
 app.use("/sermons", sermonRoutes); // sermons routes handle their own protection
 app.use("/events", eventRoutes); // events routes handle their own protection
 app.use("/uploads", express.static("uploads"));
+app.use("/contact", contactRoutes);
 
 // Catch‑all
 app.use((req, res) => {
