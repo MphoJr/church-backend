@@ -40,3 +40,14 @@ exports.deleteEvent = async (req, res) => {
   await prisma.event.delete({ where: { id: parseInt(id) } });
   res.json({ message: "Event deleted successfully" });
 };
+
+exports.deleteEvent = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.event.delete({ where: { id: parseInt(id) } });
+    res.json({ message: "Event deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete event" });
+  }
+};

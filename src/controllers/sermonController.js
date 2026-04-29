@@ -52,3 +52,14 @@ exports.getSermonById = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch sermon" });
   }
 };
+
+exports.deleteSermon = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.sermon.delete({ where: { id: parseInt(id) } });
+    res.json({ message: "Sermon deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete sermon" });
+  }
+};

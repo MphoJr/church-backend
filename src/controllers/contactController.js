@@ -36,3 +36,14 @@ exports.listMessages = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch messages" });
   }
 };
+
+exports.deleteMessage = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.contactMessage.delete({ where: { id: parseInt(id) } });
+    res.json({ message: "Message deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete message" });
+  }
+};

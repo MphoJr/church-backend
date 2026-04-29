@@ -4,6 +4,7 @@ const {
   uploadSermon,
   listSermons,
   getSermonById,
+  deleteSermon,
 } = require("../controllers/sermonController");
 const multer = require("multer");
 const path = require("path");
@@ -29,5 +30,8 @@ router.get("/", listSermons);
 
 // GET /sermons/:id → public (anyone can view a specific sermon)
 router.get("/:id", getSermonById);
+
+// DELETE /sermons/:id → protected (only logged-in admins can delete)
+router.delete("/:id", authenticateToken, deleteSermon);
 
 module.exports = router;

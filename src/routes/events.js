@@ -19,4 +19,6 @@ router.delete("/:id", authenticateToken, deleteEvent);
 router.get("/", getEvents);
 router.get("/:id", getEventById);
 
+router.delete("/:id", authenticateToken, deleteEvent);
+
 module.exports = router;
