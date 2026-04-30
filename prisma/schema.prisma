@@ -42,3 +42,22 @@ model ContactMessage {
   message   String
   createdAt DateTime @default(now())
 }
+
+model Member {
+  id            Int      @id @default(autoincrement())
+  title         String?
+  name          String
+  surname       String
+  homeLanguage  String?
+  gender        String?
+  occupation    String?
+  serviceArea   String?
+  address       String?
+  cell          String?
+  maritalStatus String?
+  spouseSaved   Boolean?
+  familyMembers Json?     // store array of {name, relationship}
+  status        String    @default("active") // ✅ active or inactive
+  createdAt     DateTime  @default(now())
+}
+
