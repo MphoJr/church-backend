@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 
 const app = require("./app");
+
 const sermonsRoutes = require("./routes/sermons");
 
 const PORT = process.env.PORT || 3000;

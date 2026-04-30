@@ -7,11 +7,12 @@ const adminRoutes = require("./routes/admin");
 const sermonRoutes = require("./routes/sermons");
 const eventRoutes = require("./routes/events");
 const contactRoutes = require("./routes/contact");
+const membersRoutes = require("./routes/members");
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: "https://naog-frontend.vercel.app" })); // Allow all origins for simplicity
 app.use(express.json());
 
 // Health check
@@ -35,6 +36,7 @@ app.use("/sermons", sermonRoutes); // sermons routes handle their own protection
 app.use("/events", eventRoutes); // events routes handle their own protection
 app.use("/uploads", express.static("uploads"));
 app.use("/contact", contactRoutes);
+app.use("/members", membersRoutes);
 
 // Catch‑all
 app.use((req, res) => {
